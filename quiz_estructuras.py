@@ -12,8 +12,10 @@ class ListaSE:
     def vacio(self):
         if self.cabeza is None:
             print("Está vacía")
+            return True
         else:
             print("Lista no vacía")
+            return False
 
     # Agregar al inicio
     def agregarInicio(self, data):
@@ -32,25 +34,18 @@ class ListaSE:
             contador += 1
             nodoesp = nodoesp.siguiente
         return contador
-
-    # Buscar un elemento
-    def buscador(self, data):
-        nodoesp = self.cabeza
-        while nodoesp is not None:
-            if nodoesp.data == data:
-                return True
-            nodoesp = nodoesp.siguiente
-        return False
     
-    #Buscador posicion
-    def buscapos(self,data):
-        nodoesp=self.cabeza
-        pos=0
-        while nodoesp.data is not None:
-            if nodoesp.data==data:
-                return pos
-            nodoesp=nodoesp.siguiente
-            pos+=1
+    #Buscador en listas
+    def buscalist(self,listas,x):
+        for i, lista in enumerate(listas):
+            nodoesp=lista.cabeza
+            while nodoesp is not None:
+                if nodoesp.data==x:
+                    print(f"Encontrado en lista {i}")
+                    return i
+                nodoesp=nodoesp.siguiente
+        print("No encontrado en ninguna lista")
+        return None
 
     # Imprimir Lista
     def imprimir(self):
@@ -62,38 +57,6 @@ class ListaSE:
     #Vaciar
     def vaciar(self):
         self.cabeza=None
-
-    #Huespedes
-    def huespedes(self,data):
-        print("Seleccione una opcion")
-        opc=input(int(f"1. Consulta de huespedes, /n, 2. Consulta de habitaciones"))
-        if opc==1:
-            opc2=input(int(f"1. Individual, /n, 2. Total"))
-            if opc2==1:
-                nombre=str(input("Ingrese el nombre del cliente: "))
-                if self.buscador(nombre):
-                    print(f"El cliente {nombre} esta hospedado")
-                else:
-                    print("El cliente no existe")
-            elif opc2==2:
-                opc3=int(input(f"1. Por cedula, 2. Por orden de llegada"))
-                if opc3==1:
-                    self.buscador(data)
-                    print(f"El cliente {data} tiene {self.contador()} huespedes")
-                elif opc3==2:
-                    self.buscador(data)
-                    print(f"El cliente {data} ")
-                print("El total de huespedes es: ",self.contador())
-            else:
-                print("Opcion no valida")
-        elif opc==2:
-            opc4=int(input(f"1. Lista de habitaciones disponibles, /n, 2. Lista de habitaciones ocupadas"))
-            if opc4==1:
-                print("El total de habitaciones disponibles es: ",self.contador())
-            elif opc4==2:
-                print("El total de habitaciones ocupadas es: ",self.contador())
-        else:
-            print("Opcion no valida")
 
 listaH1=ListaSE()
 listaH2=ListaSE()
@@ -153,23 +116,45 @@ while Opc!=6:
         print("Habitacion 5")
         listaH5.imprimir()
     elif Opc==2:
-        qui=int(input("Ingrese la cedula del huesped que desea quitar: "))
-        print(f"La posicion del huesped en la lista es de {lista.buscapos(qui)}")
-        lista.eliminaresph(qui)
+        nomb=str(input("Ingrese el nombre: "))
+        listas=[listaH1,listaH2,listaH3,listaH4,listaH5]
+        habitacion=listaH1.buscalist(listas,nomb)
+        if habitacion is None:
+            print(f"Cliente {nomb} no encontrado")
+        elif habitacion==0:
+            listaH1.vaciar()
+        elif habitacion==1:
+            listaH2.vaciar()
+        elif habitacion==2:
+            listaH3.vaciar()
+        elif habitacion==3:
+            listaH4.vaciar()
+        elif habitacion==4:
+            listaH5.vaciar()
     elif Opc==3:
-        Nhab=int(input("Que habitacion quiere consultar?: "))
-        if Nhab==1:
-            listaH1.huespedes()
-        elif Nhab==2:
-            listaH2.huespedes()
-        elif Nhab==3:
-            listaH3.huespedes()
-        elif Nhab==4:
-            listaH4.huespedes()
-        elif Nhab==5:
-            listaH5.huespedes()
+        print("Seleccione una opcion")
+        opc=int(input(f"1. Individual, 2. Total: "))
+        listas=[listaH1,listaH2,listaH3,listaH4,listaH5]
+        if opc==1:
+            nomb=str(input("Ingrese el nombre: "))
+            habitacion=listaH1.buscalist(listas,nomb)
+            if habitacion is not None:
+                print(f"El cliente {nomb} esta hospedado en la habitacion {habitacion+1}")
+            else:
+                print(f"Cliente {nomb} no encontrado")
+        elif opc==2:
+            opc3=int(input("1. Por cedula, 2. Por orden de llegada: "))
+            if opc3==1:
+                ced=int(input("Ingrese la cedula: "))
+                habitacion=listaH1.buscalist(listas,ced)
+                if habitacion is not None:
+                    print(f"El cliente {ced} esta hospedado en la habitacion {habitacion+1}")
+                else:
+                    print(f"Cliente {ced} no encontrado")
+            else:
+                print("Opcion invalida")
         else:
-            print("Habitacion no encontrada")
+            print("Opcion invalida")
     elif Opc==4:
         qui=int(input("Ingrese la habitacion que desea quitar: "))
         if qui==1:
@@ -185,4 +170,53 @@ while Opc!=6:
         else:
             print("Habitacion no encontrada")
     elif Opc==5:
-        lista.huespedes()
+        print("Seleccione una opcion")
+        opc4=int(input(f"1. Lista de habitaciones disponibles, 2. Lista de habitaciones ocupadas: "))
+        if opc4==2:
+            contd=0
+            if listaH1.vacio() is False:
+                contd+=1
+                print("Habitacion 1")
+                listaH1.imprimir()
+            if listaH2.vacio() is False:
+                contd+=1
+                print("Habitacion 2")
+                listaH2.imprimir()
+            if listaH3.vacio() is False:
+                contd+=1
+                print("Habitacion 3")
+                listaH3.imprimir()
+            if listaH4.vacio() is False:
+                contd+=1
+                print("Habitacion 4")
+                listaH4.imprimir()
+            if listaH5.vacio() is False:
+                contd+=1
+                print("Habitacion 5")
+                listaH5.imprimir()
+            print(f"Hay {contd} habitaciones ocupadas")
+        elif opc4==1:
+            conto=0
+            if listaH1.vacio() is True:
+                conto+=1
+                print("Habitacion 1")
+                listaH1.imprimir()
+            if listaH2.vacio() is True:
+                conto+=1
+                print("Habitacion 2")
+                listaH2.imprimir()
+            if listaH3.vacio() is True:
+                conto+=1
+                print("Habitacion 3")
+                listaH3.imprimir()
+            if listaH4.vacio() is True:
+                conto+=1
+                print("Habitacion 4")
+                listaH4.imprimir()
+            if listaH5.vacio() is True:
+                conto+=1
+                print("Habitacion 5")
+                listaH5.imprimir()
+            print(f"Hay {conto} habitaciones disponibles")
+        else:
+            print("Opcion invalida")
