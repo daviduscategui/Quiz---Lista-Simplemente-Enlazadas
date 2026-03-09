@@ -57,10 +57,13 @@ class ListaSE:
         for i, lista in enumerate(listas):
             nodoesp=lista.cabeza
             while nodoesp is not None:
-                if nodoesp.data==x:
-                    print(f"Encontrado en lista {i}")
-                    return i
-                nodoesp=nodoesp.siguiente
+                if isinstance(nodoesp.data,tuple):
+                    if x in nodoesp.data:
+                        print(f"Encontrado en lista {i}")
+                        return i
+                    elif nodoesp.data==x:
+                        return i
+                    nodoesp=nodoesp.siguiente
         print("No encontrado en ninguna lista")
         return None
 
