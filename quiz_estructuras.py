@@ -1,7 +1,8 @@
 class Nodo:
-    def __init__(self, data):
+    def __init__(self, data, prioridad=0):
         self.data = data
         self.siguiente = None
+        self.prioridad=prioridad
 
 # Clase Lista enlazada simple
 class ListaSE:
@@ -25,6 +26,22 @@ class ListaSE:
         else:
             nuevo_nodo.siguiente = self.cabeza
             self.cabeza = nuevo_nodo
+
+    #Agregar orden de llegada
+    def agregar(self,data,prioridad):
+        nuevoNodo=Nodo(data,prioridad)
+        if self.cabeza is None:
+            self.cabeza=nuevoNodo
+            return
+        elif nuevoNodo.prioridad<=self.cabeza.prioridad:
+            nuevoNodo.siguiente=self.cabeza
+            self.cabeza=nuevoNodo
+            return
+        actual=self.cabeza
+        while actual.siguiente is not None and actual.siguiente.prioridad<=prioridad:
+            actual=actual.siguiente
+        nuevoNodo.siguiente = actual.siguiente
+        actual.siguiente = nuevoNodo
 
     # Contador
     def contador(self):
@@ -63,6 +80,7 @@ listaH2=ListaSE()
 listaH3=ListaSE()
 listaH4=ListaSE()
 listaH5=ListaSE()
+listaO=ListaSE()
 
 Opc=0
 while Opc!=6:
@@ -74,34 +92,39 @@ while Opc!=6:
             Nhab=int(input("En que habitacion se va a hospedar?: "))
             if Nhab==1:
                 ced=int(input("Ingrese el numero de cedula: "))
-                listaH1.agregarInicio(ced)
                 nom=str(input("Ingrese el nombre del cliente: "))
-                listaH1.agregarInicio(nom)
-                listaH1.agregarInicio(Nhab)
+                hora=float(input("Ingrese la hora de su llegada: "))
+                dia=int(input("Ingrese el dia de su llegada: "))
+                listaH1.agregarInicio((ced, nom, Nhab, hora))
+                listaO.agregar((ced, nom, Nhab, hora), dia)
             elif Nhab==2:
                 ced=int(input("Ingrese el numero de cedula: "))
-                listaH2.agregarInicio(ced)
                 nom=str(input("Ingrese el nombre del cliente: "))
-                listaH2.agregarInicio(nom)
-                listaH2.agregarInicio(Nhab)
+                hora=float(input("Ingrese la hora de su llegada: "))
+                dia=int(input("Ingrese el dia de su llegada: "))
+                listaH2.agregarInicio((ced, nom, Nhab, hora))
+                listaO.agregar((ced, nom, Nhab, hora), dia)
             elif Nhab==3:
                 ced=int(input("Ingrese el numero de cedula: "))
-                listaH3.agregarInicio(ced)
                 nom=str(input("Ingrese el nombre del cliente: "))
-                listaH3.agregarInicio(nom)
-                listaH3.agregarInicio(Nhab)
+                hora=float(input("Ingrese la hora de su llegada: "))
+                dia=int(input("Ingrese el dia de su llegada: "))
+                listaH3.agregarInicio((ced, nom, Nhab, hora))
+                listaO.agregar((ced, nom, Nhab, hora), dia)
             elif Nhab==4:
                 ced=int(input("Ingrese el numero de cedula: "))
-                listaH4.agregarInicio(ced)
                 nom=str(input("Ingrese el nombre del cliente: "))
-                listaH4.agregarInicio(nom)
-                listaH4.agregarInicio(Nhab)
+                hora=float(input("Ingrese la hora de su llegada: "))
+                dia=int(input("Ingrese el dia de su llegada: "))
+                listaH4.agregarInicio((ced, nom, Nhab, hora))
+                listaO.agregar((ced, nom, Nhab, hora), dia)
             elif Nhab==5:
                 ced=int(input("Ingrese el numero de cedula: "))
-                listaH5.agregarInicio(ced)
                 nom=str(input("Ingrese el nombre del cliente: "))
-                listaH5.agregarInicio(nom)
-                listaH5.agregarInicio(Nhab)
+                hora=float(input("Ingrese la hora de su llegada: "))
+                dia=int(input("Ingrese el dia de su llegada: "))
+                listaH5.agregarInicio((ced, nom, Nhab, hora))
+                listaO.agregar((ced, nom, Nhab, hora), dia)
             else:
                 print("Habitacion no encontrada")
             centi=int(input("1. Continuar, 2. Salir: "))
@@ -151,6 +174,8 @@ while Opc!=6:
                     print(f"El cliente {ced} esta hospedado en la habitacion {habitacion+1}")
                 else:
                     print(f"Cliente {ced} no encontrado")
+            elif opc3==2:
+                listaO.imprimir()
             else:
                 print("Opcion invalida")
         else:
